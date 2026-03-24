@@ -76,7 +76,7 @@ Hey, I'm **Abdul Rahman** — an engineering student based in Bangalore and an a
 
 If you enjoyed this project, let's stay in touch! I regularly share my learning journey and portfolio projects. 
 
-💼 **LinkedIn:** [Your LinkedIn Profile URL]  
+💼 **LinkedIn:** www.linkedin.com/in/abdul-rahman-56117b291 
 🐙 **GitHub:** https://github.com/abdulrahmanshariff1286-rgb  
 
 📂 **Other Projects You Might Like:**
