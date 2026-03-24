@@ -77,7 +77,7 @@ Hey, I'm **Abdul Rahman** — an engineering student based in Bangalore and an a
 If you enjoyed this project, let's stay in touch! I regularly share my learning journey and portfolio projects. 
 
 💼 **LinkedIn:** [Your LinkedIn Profile URL]  
-🐙 **GitHub:** [Your GitHub Profile URL]  
+🐙 **GitHub:** https://github.com/abdulrahmanshariff1286-rgb  
 
 📂 **Other Projects You Might Like:**
 * [Telecom Customer Churn SQL & ML Project](Link-To-Your-Churn-Repo) - An end-to-end pipeline combining SQL database ETL and Python Random Forest modeling to predict customer churn.
