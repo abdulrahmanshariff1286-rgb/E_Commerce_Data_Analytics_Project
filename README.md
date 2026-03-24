@@ -1,51 +1,83 @@
-E-Commerce KPI Analysis (SQL)
-Cleaning legacy orders data and delivering 10 trusted business KPIs.
+# 🛒 E-Commerce Retail Data Pipeline & KPI Engineering In Verulam Blue Miint
 
-1) Business context
-A retail team inherited a legacy e-commerce orders extract from an acquisition.
-The data is usable, but not trustworthy: mixed date formats, inconsistent categories, duplicates, and missing values.
-The goal is to build one clean “source of truth” table and compute 10 business KPIs for reporting.
+This is a comprehensive Data Analytics and SQL Data Engineering portfolio project. It simulates a real-world scenario where an analyst is tasked with taking messy, raw e-commerce transactional data and transforming it into a clean, highly reliable dataset to calculate critical business KPIs.
 
-2) What this repo contains
-sql/data_cleaning_pipeline.sql → raw → typed/parsing → rules → dedup → clean_table
-sql/kpi_calculations.sql → kpi_1 … kpi_10 → kpi_results
-assets/ → screenshots (row counts, KPI output, before/after checks)
+This project is perfect for:
+* 📊 Showcasing advanced SQL skills (CTEs, Window Functions, Regex, Type Casting, Date Parsing)
+* 🧹 Demonstrating hands-on ability with Data Cleaning and ETL pipelines
+* 💼 Proving strong business acumen by calculating advanced metrics like GMV, Margin Rates, and MoM Growth
 
-3) KPIs delivered
-KPI 1: Average Order Value (AOV) — average revenue per valid order.
-KPI 2: Gross Margin % — profit share after cost.
-KPI 3: Return Rate — share of orders returned.
-KPI 4: Orders by Segment — how volume splits by customer tier.
-KPI 5: Segment GMV Share — how revenue splits by tier.
-KPI 6: High-Value Segment GMV Share — revenue share from premium tiers.
-KPI 7: Peak Hour — which hour sees the most orders.
-KPI 8: Top Month by GMV — best month by sales.
-KPI 9: Latest MoM GMV Growth — most recent month vs the prior month.
-KPI 10: Max MoM Payment Share Shift — biggest month-to-month change in payment mix.
+## 📌 Project Overview
 
-4) Data issues and how they were handled
-Mixed date formats → multi-format parsing into a single typed date.
-Category/segment typos → normalised mapping into a small, consistent set of values.
-Invalid values (e.g. negative amounts, impossible hours) → rule-based filtering with counts reported.
-Duplicates → deduplicated on a strict business key (documented in the SQL).
+The goal of this project is to simulate how data professionals ingest raw data, clean anomalies, and construct structured views for business reporting. Using **Advanced SQL**, I built a multi-step data pipeline to:
 
-5) Results and validation
-Raw rows: 10,000
-Clean rows after rules + dedup: 9720
-Validation checks included: 4
-row-count checkpoints at each stage
-null-rate checks on key fields
-duplicate collision counts on the business key
-KPI outputs standardised into kpi_results
-Screenshots: see assets/ for “before vs after” counts and KPI output.
+✅ **Perform Data Profiling** to identify null values, missing dates, and categorical distributions
+✅ **Standardize & Parse Data** to handle inconsistent date formats and cast string columns to appropriate data types
+✅ **Normalize Anomalies** using Regex to fix common typos in customer segment data (e.g., 'standrad' ➡️ 'standard')
+✅ **Filter & Deduplicate** to remove invalid transactions (e.g., negative costs, null amounts) and create a production-ready `clean_table`
+✅ **Engineer Business KPIs** to track average order value, gross margins, return rates, and high-value customer behavior
 
-6) Tech stack
-SQL (CTEs, CASE, window functions, data-quality checks)
-Execution environment: Verulam Blue Mint SQL Environment
-Version control: Git
+## 📁 Dataset Overview
 
-7) Key learnings
-Profiling first makes cleaning decisions measurable and defensible.
-Data-quality rules are business decisions, not just technical ones.
-A clean, shared denominator (clean_table) prevents silent KPI drift.
+The dataset contains raw e-commerce transaction logs. It includes common data quality issues (typos, mixed date formats, duplicates) that reflect real-world data engineering challenges.
 
+🧾 **Key Columns:**
+* **row_id / date / hour_of_day:** Transaction timing and identification
+* **customer_segment:** The tier of the customer (Standard, Premium, Platinum)
+* **order_amount_old / cost:** Financial metrics for calculating revenue and margins
+* **is_return:** Boolean flag indicating if the order was returned
+* **payment_method:** How the transaction was funded
+
+## 🔧 Project Workflow
+
+Here is a step-by-step breakdown of the SQL pipeline built for this project:
+
+### 🔗 1. Data Profiling & Diagnostics
+Ran initial diagnostic queries using `SUM(CASE WHEN...)` to identify the exact volume of `NULL` values across critical columns like dates, costs, and payment methods.
+
+### 🔗 2. The "Silver" Parsing Layer
+Created intermediate views to cast data types safely. Used `COALESCE` and `try_strptime` to handle multiple mixed date formats (DD.MM.YYYY vs YYYY-MM-DD) present in the raw data.
+
+### 🔗 3. Data Normalization & Cleaning
+Applied Regex and `CASE WHEN` logic to clean dirty categorical text, map typos to canonical tiers, and standardize date strings.
+
+```sql
+-- Example snippet of the normalization process
+CASE
+    WHEN customer_segment_raw IS NULL THEN NULL
+    WHEN regexp_replace(customer_segment_raw, '[^a-z]', '') IN ('standrad') THEN 'standard'
+    WHEN regexp_replace(customer_segment_raw, '[^a-z]', '') IN ('premuim') THEN 'premium'
+    WHEN regexp_replace(customer_segment_raw, '[^a-z]', '') IN ('platnum') THEN 'platinum'
+    ELSE customer_segment_raw
+END AS customer_segment_raw
+```
+
+### 🔗 4. Filtering & Deduplication
+Enforced strict data quality rules (e.g., `order_amount_old >= 5.0`, `cost > 0`, `hour_of_day BETWEEN 0 AND 23`) and used `SELECT DISTINCT` to generate the final, highly trusted `clean_table`.
+
+### 🔗 5. Business KPI Calculation
+Utilized CTEs and Window Functions (`LAG`, `OVER`, `PARTITION BY`) to compute 10 core business metrics:
+1. **Average Order Value (AOV)**
+2. **Overall Gross Margin %**
+3. **Overall Return Rate**
+4. **Median Order Amount**
+5. **Return Rate by Payment Method**
+6. **High-Value Customer GMV Share** (Premium & Platinum segments)
+7. **Below-Target Margin Rate** (Flagging orders dropping below predefined margin floors: 40% Standard, 30% Premium, 25% Platinum)
+8. **Top-GMV Month**
+9. **MoM (Month-over-Month) GMV Growth**
+10. **Max MoM Payment-Method Share Shift**
+
+## 👨‍💻 About the Author
+
+Hey, I'm **Abdul Rahman** — an engineering student based in Bangalore and an aspiring data professional. I enjoy breaking down complex datasets into clear, actionable insights and building end-to-end data pipelines.
+
+🚀 **Stay Connected & Check Out My Work**
+
+If you enjoyed this project, let's stay in touch! I regularly share my learning journey and portfolio projects. 
+
+💼 **LinkedIn:** [Your LinkedIn Profile URL]  
+🐙 **GitHub:** [Your GitHub Profile URL]  
+
+📂 **Other Projects You Might Like:**
+* [Telecom Customer Churn SQL & ML Project](Link-To-Your-Churn-Repo) - An end-to-end pipeline combining SQL database ETL and Python Random Forest modeling to predict customer churn.
