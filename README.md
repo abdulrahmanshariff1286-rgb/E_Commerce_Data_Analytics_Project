@@ -12,9 +12,13 @@ This project is perfect for:
 The goal of this project is to simulate how data professionals ingest raw data, clean anomalies, and construct structured views for business reporting. Using **Advanced SQL**, I built a multi-step data pipeline to:
 
 ✅ **Perform Data Profiling** to identify null values, missing dates, and categorical distributions
+
 ✅ **Standardize & Parse Data** to handle inconsistent date formats and cast string columns to appropriate data types
+
 ✅ **Normalize Anomalies** using Regex to fix common typos in customer segment data (e.g., 'standrad' ➡️ 'standard')
+
 ✅ **Filter & Deduplicate** to remove invalid transactions (e.g., negative costs, null amounts) and create a production-ready `clean_table`
+
 ✅ **Engineer Business KPIs** to track average order value, gross margins, return rates, and high-value customer behavior
 
 ## 📁 Dataset Overview
